@@ -2,21 +2,23 @@ package edu.jsu.mcis.lab6.dao;
 
 import java.sql.*;
 import org.json.simple.*;
+import org.json.simple.parser.JSONParser;
 
 public class TrainingSessionDAO {
     
     private final DAOFactory daoFactory;
     
     private final String QUERY_SELECT_WITHOUT_ID = "SELECT * FROM `session`";
-    private final String QUERY_SELECT_BY_ID = "SELECT * FROM attendee, registration, `session` where sessionid = ? order by firstname";
+    private final String QUERY_SELECT_BY_ID = "SELECT attendeeid FROM registration WHERE sessionid = ?";
     
     TrainingSessionDAO (DAOFactory dao) {
         this.daoFactory = dao;
     }
     
     public String findSession() {
-        //int id; String description;
         JSONObject json = new JSONObject();
+        JSONArray records = new JSONArray();
+        
         json.put("success", false);
         
         Connection conn = daoFactory.getConnection();
@@ -37,6 +39,7 @@ public class TrainingSessionDAO {
                     
                     json.put("id", rs.getInt("id"));
                     json.put("description", rs.getString("description"));
+                    records.add(json);
                 }
             }
         }
@@ -67,16 +70,20 @@ public class TrainingSessionDAO {
 
         }
 
-        return JSONValue.toJSONString(json);
+        return JSONValue.toJSONString(records);
     }
     
     public String findSessionById(int sessionid) {
+        JSONArray records = new JSONArray();
+        JSONParser parser = new JSONParser();
         JSONObject json = new JSONObject();
         json.put("success", false);
         
         Connection conn = daoFactory.getConnection();
         PreparedStatement ps = null;
         ResultSet rs = null;
+        
+        AttendeeDAO a_dao = daoFactory.getAttendeeDAO();
         
         try {
             ps = conn.prepareStatement(QUERY_SELECT_BY_ID);
@@ -91,12 +98,11 @@ public class TrainingSessionDAO {
                 
                     json.put("success", hasresults);
                     
-                    json.put("firstname", rs.getString("firstname"));
-                    json.put("lastname", rs.getString("lastname"));
-                    json.put("displayname", rs.getString("displayname"));
-                    json.put("attendeeid", rs.getInt("attendeeid"));
-                    json.put("sessionid", rs.getInt("sessionid"));
-                    json.put("description", rs.getString("description"));
+                    int attendeeID = rs.getInt("attendeeid");
+                    String jsonString = a_dao.findAttendee(attendeeID);
+                    json = (JSONObject)parser.parse(jsonString);
+                    records.add(json);
+                    
                 }
             }
         }
@@ -127,7 +133,7 @@ public class TrainingSessionDAO {
 
         }
 
-        return JSONValue.toJSONString(json);
+        return JSONValue.toJSONString(records);
     }
     
 }

@@ -1,8 +1,7 @@
 
 package edu.jsu.mcis.lab6;
 
-import edu.jsu.mcis.lab6.dao.DAOFactory;
-import edu.jsu.mcis.lab6.dao.TrainingSessionDAO;
+import edu.jsu.mcis.lab6.dao.*;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletContext;
@@ -37,9 +36,11 @@ public class TrainingSessionServlet extends HttpServlet {
             TrainingSessionDAO dao = daoFactory.getTrainingSessionDAO();
             
             if (s_id == null || "".equals(s_id)) {
+                System.err.println("Getting all sessions");
                 out.println(dao.findSession());
             }
             else {
+                System.err.println("Finding Attendees");
                 out.println(dao.findSessionById(s_id));
             }
             
@@ -54,6 +55,6 @@ public class TrainingSessionServlet extends HttpServlet {
     @Override
     public String getServletInfo() {
         return "Training Session Servlet";
-    }// </editor-fold>
+    }
 
 }

@@ -14,7 +14,7 @@ public class RegistrationDAO {
             + "((registration JOIN attendee ON registration.attendeeid = attendee.id) "
             + "JOIN `session` ON registration.sessionid = `session`.id) "
             + "WHERE `session`.id = ? AND attendee.id = ?";
-    private final String QUERY_CREATE = "INSERT INTO registration (attendeeid, sessionid)" + "VLAUES (?,?)";
+    private final String QUERY_CREATE = "INSERT INTO registration (attendeeid, sessionid)" + "VALUES (?,?)";
     private final String QUERY_UPDATE = "UPDATE registration SET attendeeid = ? AND sessionid = ?" + "WHERE (attendeeid = ? AND sessionid = ?)";
     private final String QUERY_DELETE = "DELETE FROM registration WHERE (attendeeid = ? AND sessionid = ?";
     
