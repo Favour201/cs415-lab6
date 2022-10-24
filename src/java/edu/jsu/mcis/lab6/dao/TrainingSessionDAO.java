@@ -33,7 +33,7 @@ public class TrainingSessionDAO {
             if (hasresults) {
                 rs = ps.getResultSet();
                 
-                if (rs.next()) {
+                while (rs.next()) {
                 
                     json.put("success", hasresults);
                     

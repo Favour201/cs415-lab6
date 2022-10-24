@@ -208,6 +208,7 @@ public class RegistrationDAO {
         JSONObject json = new JSONObject();
         
         json.put("success", false);
+        
         PreparedStatement ps = null;
         ResultSet rs = null;
         Connection conn = daoFactory.getConnection();

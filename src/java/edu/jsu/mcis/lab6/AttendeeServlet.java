@@ -36,14 +36,14 @@ public class AttendeeServlet extends HttpServlet {
             
             AttendeeDAO dao = daoFactory.getAttendeeDAO();
             
-            String p_id = request.getParameter("id");
+            Integer p_id = Integer.parseInt(request.getParameter("id"));
             if (p_id == null || "".equals(p_id)) {
                 
                 System.err.println("Attendee GET request...");
             }
             else{
                 System.err.println("Getting attendee...");
-                out.println(dao.findAttendee(Integer.parseInt(p_id)));
+                out.println(dao.findAttendee(p_id));
             }
             
         }

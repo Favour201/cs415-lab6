@@ -11,6 +11,7 @@ public class AttendeeDAO {
     private final String QUERY_CREATE = "INSERT INTO attendee (firstname, lastname, displayname" + "VALUES (?,?)";
     private final String QUERY_UPDATE = "UPDATE attendee SET "
             + "firstname = ?, lastname = ?, displayname = ? WHERE id = ?;";
+    private final String QUERY_BY_REGISTRATION_NUMBER = "SELECT CONCAT(\"R\", LPAD(attendeeid, 6, 0) AS num FROM registration WHERE attendeeid = ?";
     
     AttendeeDAO(DAOFactory dao){
         this.daoFactory = dao;
@@ -71,7 +72,7 @@ public class AttendeeDAO {
             }
 
         }
-
+        json.put("registrationnumber", getRegisNumByAttendeeID(attendeeid));
         return JSONValue.toJSONString(json);
     }
     
@@ -185,6 +186,58 @@ public class AttendeeDAO {
         
         return JSONValue.toJSONString(json);
         
+    }
+    
+    //To return a 6 digit registration code based on the attendeesid
+    
+    private String getRegisNumByAttendeeID(int attendeeid) {
+        Connection conn = daoFactory.getConnection();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        String idResults = "";
+        
+        try {
+            ps = conn.prepareStatement(QUERY_BY_REGISTRATION_NUMBER);
+            ps.setInt(1, attendeeid);
+            
+            boolean hasresults = ps.execute();
+            
+            if (hasresults) {
+                rs = ps.getResultSet();
+                
+                if (rs.next()) {
+                    idResults = rs.getString("num");
+                }
+            }
+        }
+        catch(Exception e) {e.printStackTrace();}
+        finally {
+
+            if (rs != null) {
+                try {
+                    rs.close();
+                    rs = null;
+                }
+                catch (Exception e) { e.printStackTrace(); }
+            }
+            if (ps != null) {
+                try {
+                    ps.close();
+                    ps = null;
+                }
+                catch (Exception e) { e.printStackTrace(); }
+            }
+            if (conn != null) {
+                try {
+                    conn.close();
+                    conn = null;
+                }
+                catch (Exception e) { e.printStackTrace(); }
+            }
+
+        }
+        
+        return idResults;
     }
 }
 
