@@ -32,10 +32,7 @@
 
         </form>
 
-        <div id="login_instructions">
 
-            <h2>How to Log In:</h2>
-            <p>Enter the Username and Password that you were provided with Example Web Application #1.  See the setup instructions for this application on Canvas.</p>
 
         </div>
 
