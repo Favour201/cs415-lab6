@@ -16,12 +16,12 @@
             <fieldset>
                 <legend>Edit A Registration</legend>
                 <p>
-                    <input name="s_attendeeid" id="s_attendeeid" type="number" placeholder="Enter ID Number"></p>
+                    <input name="putattendeeid" id="putattendeeid" type="number" placeholder="Enter ID Number"></p>
                 <p>
-                <input name="s_sessionid" id="s_sessionid" type="number" placeholder="Current Session #">
+                <input name="putsessionid" id="putsessionid" type="number" placeholder="Current Session #">
                 </p>
                 <p>
-                <input name="newsessionid" id="newsessionid" type="number" placeholder="New Session #">
+                <input name="putnewsessionid" id="putnewsessionid" type="number" placeholder="New Session #">
                 </p>
                 <p>
                     <input type="button" value="Edit Registration" onclick="Lab6A.onclickEditReg();";>
@@ -42,10 +42,10 @@
                     <input name="deletesessionid" id="deletesessionid" placeholder="Eneter Session #">
                 </p>
                 <p>
-                    <input type="button" value="Delete" onclick="Lab6A.onclickDelete();">
+                    <input type="button" value="Delete Registration" onclick="Lab6A.onclickDelete();">
                 </p>
             </fieldset>
         </form>
-        <a href="homepage.jsp">Click here to return to homepage</a>
+        <a href="Homepage.jsp">Click here to return to homepage</a>
     </body>
 </html>
