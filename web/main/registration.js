@@ -29,7 +29,7 @@ var Lab6A = (function(){
     };
     var register = function(attendeeid) {
             $.ajax({
-                url: "http://localhost:8180/Lab6A/main/Registrations",
+                url: "main/registrations",
                 method: 'POST',
                 data: {"sessionid": $("#sessionid").val(), "attendeeid": attendeeid},
                 dataType: 'json',
@@ -41,7 +41,7 @@ var Lab6A = (function(){
     }; 
     var attendeeRegister = function() {
             $.ajax({
-                url:"main/AttendeeServlet",
+                url:"/main/AttendeeServlet",
                 method: 'POST',
                 data: $("#attendeeform").serialize(),
                 datatype: 'json',
@@ -53,7 +53,7 @@ var Lab6A = (function(){
         };
     var editReg = function(){
             $.ajax({
-                url: "http://localhost:8180/Lab6A/main/Registrations",
+                url: "/main/registrations",
                 method: 'PUT',
                 data: $("#editRegistration").serialize(),
                 datatype: 'json',
@@ -65,7 +65,7 @@ var Lab6A = (function(){
     
     var deleteA = function(){
             $.ajax({
-                url: "http://localhost:8180/Lab6A/main/Registrations",
+                url: "/main/registrations",
                 method: 'DELETE',
                 data: $("#deleteregistration").serialize(),
                 datatype: 'json',
@@ -76,7 +76,7 @@ var Lab6A = (function(){
         };
     var editUser = function(){
             $.ajax({
-                url: "main/AttendeeServelet",
+                url: "/main/AttendeeServelet",
                 method: 'PUT',
                 data: $("#attendeeEditForm").serialize(),
                 datatype: 'json',
@@ -89,7 +89,7 @@ var Lab6A = (function(){
        
         getSessionsList: function(){
             $.ajax({
-                url: "main/TrainingSessionServlet",
+                url: "/main/TrainingSessionServlet",
                 method: 'GET',
                 datatype: 'json',
                 success: function(response){

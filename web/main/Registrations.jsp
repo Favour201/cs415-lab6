@@ -28,7 +28,6 @@
                 <p> <input type="button" value="Submit" onclick="Lab6A.onclickRegister();"></p>
             </fieldset>
         </form>
-        <div id="output"></div>
         <script type="text/javascript">
             $("#firstname").change(function(){
                 var firstname = $("#firstname").val().trim();
