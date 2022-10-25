@@ -28,11 +28,11 @@ public class TrainingSessionServlet extends HttpServlet {
             daoFactory = (DAOFactory) context.getAttribute("daoFactory");
         }
         
-        response.setContentType("application/json; charset=UTF-8");
+        response.setContentType("application/json;charset=UTF-8");
         
         try ( PrintWriter out = response.getWriter()) {
             
-            Integer s_id = Integer.parseInt(request.getParameter("sessionid")); 
+            String s_id = request.getParameter("sessionid"); 
             TrainingSessionDAO dao = daoFactory.getTrainingSessionDAO();
             
             if (s_id == null || "".equals(s_id)) {
@@ -41,7 +41,7 @@ public class TrainingSessionServlet extends HttpServlet {
             }
             else {
                 System.err.println("Finding Attendees");
-                out.println(dao.findSessionById(s_id));
+                out.println(dao.findSessionById(Integer.parseInt(s_id)));
             }
             
             

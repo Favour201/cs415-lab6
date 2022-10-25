@@ -36,14 +36,14 @@ public class AttendeeServlet extends HttpServlet {
             
             AttendeeDAO dao = daoFactory.getAttendeeDAO();
             
-            Integer p_id = Integer.parseInt(request.getParameter("id"));
+            String p_id = request.getParameter("id");
             if (p_id == null || "".equals(p_id)) {
                 
                 System.err.println("Attendee GET request...");
             }
             else{
                 System.err.println("Getting attendee...");
-                out.println(dao.findAttendee(p_id));
+                out.println(dao.findAttendee(Integer.parseInt(p_id)));
             }
             
         }
@@ -78,14 +78,15 @@ public class AttendeeServlet extends HttpServlet {
             String firstname = request.getParameter("firstname");
             String lastname = request.getParameter("lastname");
             String displayname = request.getParameter("displayname");
-            int sessionid = Integer.parseInt(request.getParameter("sessionid"));
+            
             
             AttendeeDAO a_dao = daoFactory.getAttendeeDAO();
-            RegistrationDAO r_dao = daoFactory.getRegistrationDAO();
             
-            Attendee a_Obj = new Attendee(attendeeid, firstname, lastname, displayname);
+            
+            
+            Attendee a_Obj = new Attendee(null, firstname, lastname, displayname);
             out.println(a_dao.createAttendee(a_Obj));
-            out.println(r_dao.create(sessionid, attendeeid));
+          
              
         }
         catch (Exception e) {

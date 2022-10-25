@@ -15,8 +15,10 @@ public class RegistrationDAO {
             + "JOIN `session` ON registration.sessionid = `session`.id) "
             + "WHERE `session`.id = ? AND attendee.id = ?";
     private final String QUERY_CREATE = "INSERT INTO registration (attendeeid, sessionid)" + "VALUES (?,?)";
-    private final String QUERY_UPDATE = "UPDATE registration SET attendeeid = ? AND sessionid = ?" + "WHERE (attendeeid = ? AND sessionid = ?)";
-    private final String QUERY_DELETE = "DELETE FROM registration WHERE (attendeeid = ? AND sessionid = ?";
+    private final String QUERY_UPDATE = "UPDATE registration SET  sessionid = ?" + "WHERE attendeeid = ? AND sessionid = ?";
+    private final String QUERY_DELETE_REG = "DELETE FROM registration WHERE (attendeeid = ? AND sessionid = ?";
+    private final String QUERY_DELETE_ATTENDEE = "DELETE from attendee WHERE id = ?";
+     private final String QUERY_BY_REGISTRATION_NUMBER = "SELECT CONCAT(\"R\", LPAD(attendeeid, 6, 0) AS num FROM registration WHERE attendeeid = ?";
     
     RegistrationDAO(DAOFactory dao) {
         this.daoFactory = dao;
@@ -29,6 +31,7 @@ public class RegistrationDAO {
 
         Connection conn = daoFactory.getConnection();
         PreparedStatement ps = null;
+        PreparedStatement ps_2 = null;
         ResultSet rs = null;
 
         try {
@@ -57,7 +60,19 @@ public class RegistrationDAO {
                 }
 
             }
-
+            
+            ps_2 = conn.prepareStatement(QUERY_BY_REGISTRATION_NUMBER);
+            ps_2.setInt(1, attendeeid);
+            ps_2.setInt(2, sessionid);
+            
+            boolean hasresults_2 = ps_2.execute();
+            
+            if(hasresults_2) {
+                rs = ps_2.getResultSet();
+                if(rs.next()){
+                    json.put("registrationcode", rs.getString("num"));
+                }
+            }
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -105,7 +120,7 @@ public class RegistrationDAO {
         
         try{
             
-            ps = conn.prepareStatement(QUERY_CREATE, Statement.RETURN_GENERATED_KEYS);
+            ps = conn.prepareStatement(QUERY_CREATE);
             ps.setInt(1, attendeeid);
             ps.setInt(2, sessionid);
             
@@ -147,7 +162,7 @@ public class RegistrationDAO {
     }
     
     //To update an existing registration
-    public String update(int sessionid_old, int attendeeid_old, int sessionid_updated, int attendeeid_updated) {
+    public String update(String sessionid, String attendeeid, String newsessionid) {
         JSONObject json = new JSONObject();
         
         json.put("success", false);
@@ -156,13 +171,16 @@ public class RegistrationDAO {
         ResultSet rs = null;
         Connection conn = daoFactory.getConnection();
         
+        int sessionid_int = Integer.parseInt(sessionid);
+        int attendeeid_int = Integer.parseInt(attendeeid);
+        int newSessionid_int = Integer.parseInt(newsessionid);
+        
         try {
             
             ps = conn.prepareStatement(QUERY_UPDATE);
-            ps.setInt(1, attendeeid_old);
-            ps.setInt(2, sessionid_old);
-            ps.setInt(3, attendeeid_updated);
-            ps.setInt(4, sessionid_updated);
+            ps.setInt(1, sessionid_int);
+            ps.setInt(2, sessionid_int);
+            ps.setInt(3, sessionid_int);
             
             int updateCount = ps.executeUpdate();
             
@@ -210,12 +228,15 @@ public class RegistrationDAO {
         json.put("success", false);
         
         PreparedStatement ps = null;
+        PreparedStatement ps_2 = null;
+
         ResultSet rs = null;
         Connection conn = daoFactory.getConnection();
+        boolean result = false;
         
         try {
         
-            ps = conn.prepareStatement(QUERY_DELETE);
+            ps = conn.prepareStatement(QUERY_DELETE_REG);
             
             ps.setInt(1, attendeeid);
             ps.setInt(2, sessionid);
@@ -223,11 +244,18 @@ public class RegistrationDAO {
             int updateCount = ps.executeUpdate();
             
             if (updateCount > 0 ) {
-            
+                result = true;
                 json.put("success", true);
                 json.put("rowsAffected", updateCount);
             }
+            
+            ps_2 = conn.prepareStatement(QUERY_DELETE_ATTENDEE);
+            ps_2.setInt(1, attendeeid);
+            ps_2.execute();
+            
+            json.put("success", result);
         }
+          
         catch (Exception e){e.printStackTrace();}
         
         finally {

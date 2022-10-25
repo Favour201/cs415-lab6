@@ -22,7 +22,10 @@ public class AttendeeDAO {
         json.put("success", false);
         
         Connection conn = daoFactory.getConnection();
-        PreparedStatement ps = null;
+        PreparedStatement ps = null;    
+        PreparedStatement ps_2 = null;
+
+        
         ResultSet rs = null;
         
         try {
@@ -42,7 +45,6 @@ public class AttendeeDAO {
                         json.put("displayname", rs.getString("displayname"));
                     }
             }
-            
         }
         catch(Exception e){
             e.printStackTrace();
@@ -79,6 +81,7 @@ public class AttendeeDAO {
     public String createAttendee(Attendee a) {
         JSONObject json = new JSONObject();
         json.put("success", false);
+        int result = 0;
 
         Connection conn = daoFactory.getConnection();
         PreparedStatement ps = null;
@@ -95,7 +98,13 @@ public class AttendeeDAO {
             
             if (updateCount > 0 ) {
                 json.put("success", true);
+                rs = ps.getGeneratedKeys();
                 json.put("rowsAffected", updateCount);
+                
+                while(rs.next()){
+                    result = rs.getInt(1);
+                    json.put("id", result);
+                }
             }
         }
         catch(Exception e) {e.printStackTrace();}
@@ -132,6 +141,7 @@ public class AttendeeDAO {
         
         JSONObject json = new JSONObject();
         json.put("success", false);
+        boolean result = false;
         
         Connection conn = daoFactory.getConnection();
         PreparedStatement ps = null;

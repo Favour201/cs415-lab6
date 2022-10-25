@@ -94,14 +94,13 @@ public class RegistrationServlet extends HttpServlet {
         response.setContentType("application/json; charset=UTF-8");
         
         try (PrintWriter out = response.getWriter()){
-            int sessionid_old = Integer.parseInt(request.getParameter("sessionid_old"));
-            int attendeeid_old = Integer.parseInt(request.getParameter("attendeeid_old"));
-            int sessionid_updated = Integer.parseInt(request.getParameter("sessionid_updated"));
-            int attendeeid_updated = Integer.parseInt(request.getParameter("attendeeid_updated"));
+            String sessionid = request.getParameter("putsessionid");
+            String attendeeid = request.getParameter("putattendeeid");
+            String newsessionid = request.getParameter("putnewsessionid");
             
             RegistrationDAO dao = daoFactory.getRegistrationDAO();
             
-            out.println(dao.update(sessionid_old, attendeeid_old, sessionid_updated, attendeeid_updated));
+            out.println(dao.update(sessionid, attendeeid, newsessionid));
         }
         catch (Exception e) {e.printStackTrace();}
     }
@@ -125,8 +124,8 @@ public class RegistrationServlet extends HttpServlet {
         response.setContentType("application/json; charset=UTF-8");
         
         try ( PrintWriter out = response.getWriter()) {
-            int sessionid = Integer.parseInt(request.getParameter("sessinid"));
-            int attendeeid = Integer.parseInt(request.getParameter("attendeeid"));
+            int sessionid = Integer.parseInt(request.getParameter("deletesessinid"));
+            int attendeeid = Integer.parseInt(request.getParameter("deleteattendeeid"));
             
             RegistrationDAO dao = daoFactory.getRegistrationDAO();
             

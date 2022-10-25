@@ -100,11 +100,12 @@ public class TrainingSessionDAO {
                     
                     int attendeeID = rs.getInt("attendeeid");
                     String jsonString = a_dao.findAttendee(attendeeID);
-                    json = (JSONObject)parser.parse(jsonString);
-                    records.add(json);
+                    JSONObject a_Object = (JSONObject)parser.parse(jsonString);
+                    records.add(a_Object);
                     
                 }
             }
+            json.put("attendees", records);
         }
         catch(Exception e){e.printStackTrace();}
         finally {
@@ -133,7 +134,7 @@ public class TrainingSessionDAO {
 
         }
 
-        return JSONValue.toJSONString(records);
+        return JSONValue.toJSONString(json);
     }
     
 }
